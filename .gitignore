@@ -1,0 +1,15 @@
+# Node
+node_modules/
+
+# Environment / Secrets — DO NOT COMMIT
+.env
+*.env
+atlas-credentials.env
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
