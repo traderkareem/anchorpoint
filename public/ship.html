@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Shipment — AnchorPoint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/ship.css" />
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AnchorPoint</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="ship.html" class="active">Ship</a>
+        <a href="track.html">Track</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#login" class="btn btn-ghost">Login</a>
+        <a href="#signup" class="btn btn-accent">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ PAGE TITLE ═══ -->
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="index.html">Home</a> / Create Shipment</p>
+      <h1>Create a new shipment</h1>
+      <p class="page-sub">Fill in the details below. You'll see the price before you confirm.</p>
+    </div>
+  </section>
+
+  <!-- ═══ FORM ═══ -->
+  <main class="ship-main">
+    <div class="container ship-layout">
+
+      <!-- FORM COLUMN -->
+      <form id="shipment-form" class="ship-form" novalidate>
+
+        <!-- ══ STEP 1: SENDER ══ -->
+        <section class="form-section">
+          <div class="form-section-head">
+            <span class="section-num">1</span>
+            <h2>Sender details</h2>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="senderName">Full name *</label>
+              <input type="text" id="senderName" name="senderName" required placeholder="e.g. Nuhu Abdulkarim" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="senderEmail">Email *</label>
+              <input type="email" id="senderEmail" name="senderEmail" required placeholder="you@example.com" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="senderPhone">Phone *</label>
+              <input type="tel" id="senderPhone" name="senderPhone" required placeholder="+234 800 000 0000" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="senderCountry">Country *</label>
+              <select id="senderCountry" name="senderCountry" required>
+                <option value="">Select country</option>
+              </select>
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="senderCity">City *</label>
+              <input type="text" id="senderCity" name="senderCity" required placeholder="e.g. Lagos" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field field-full">
+              <label for="senderAddress">Pickup address *</label>
+              <input type="text" id="senderAddress" name="senderAddress" required placeholder="Street, building, apartment" />
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ STEP 2: RECEIVER ══ -->
+        <section class="form-section">
+          <div class="form-section-head">
+            <span class="section-num">2</span>
+            <h2>Receiver details</h2>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="receiverName">Full name *</label>
+              <input type="text" id="receiverName" name="receiverName" required placeholder="e.g. Jane Smith" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="receiverEmail">Email *</label>
+              <input type="email" id="receiverEmail" name="receiverEmail" required placeholder="jane@example.com" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="receiverPhone">Phone *</label>
+              <input type="tel" id="receiverPhone" name="receiverPhone" required placeholder="+1 555 000 0000" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="receiverCountry">Country *</label>
+              <select id="receiverCountry" name="receiverCountry" required>
+                <option value="">Select country</option>
+              </select>
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="receiverCity">City *</label>
+              <input type="text" id="receiverCity" name="receiverCity" required placeholder="e.g. New York" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field field-full">
+              <label for="receiverAddress">Delivery address *</label>
+              <input type="text" id="receiverAddress" name="receiverAddress" required placeholder="Street, building, apartment" />
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ STEP 3: PACKAGE ══ -->
+        <section class="form-section">
+          <div class="form-section-head">
+            <span class="section-num">3</span>
+            <h2>Package details</h2>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="packageWeight">Weight (kg) *</label>
+              <input type="number" id="packageWeight" name="packageWeight" required min="0.1" step="0.1" placeholder="e.g. 2.5" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="packageLength">Length (cm) *</label>
+              <input type="number" id="packageLength" name="packageLength" required min="1" placeholder="e.g. 30" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="packageWidth">Width (cm) *</label>
+              <input type="number" id="packageWidth" name="packageWidth" required min="1" placeholder="e.g. 20" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="packageHeight">Height (cm) *</label>
+              <input type="number" id="packageHeight" name="packageHeight" required min="1" placeholder="e.g. 15" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field field-full">
+              <label for="packageDescription">What's inside? *</label>
+              <input type="text" id="packageDescription" name="packageDescription" required placeholder="e.g. Documents, clothes, electronics" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="packageValue">Declared value (USD)</label>
+              <input type="number" id="packageValue" name="packageValue" min="0" step="1" placeholder="e.g. 200" />
+              <span class="error-msg"></span>
+            </div>
+
+            <div class="field">
+              <label for="serviceType">Service type *</label>
+              <select id="serviceType" name="serviceType" required>
+                <option value="">Select service</option>
+                <option value="same-day" data-rate="1.0">Local Same-Day</option>
+                <option value="standard" data-rate="1.5">Standard Parcel</option>
+                <option value="express" data-rate="2.5">International Express</option>
+              </select>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ SUBMIT ══ -->
+        <div class="form-actions">
+          <a href="index.html" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-accent btn-lg">Review Shipment →</button>
+        </div>
+
+      </form>
+
+      <!-- ══ SIDEBAR: LIVE SUMMARY ══ -->
+      <aside class="ship-summary">
+        <div class="summary-card">
+          <h3>Shipment summary</h3>
+
+          <div class="summary-row">
+            <span>From</span>
+            <strong id="sum-from">—</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>To</span>
+            <strong id="sum-to">—</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Service</span>
+            <strong id="sum-service">—</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Weight</span>
+            <strong id="sum-weight">—</strong>
+          </div>
+
+          <hr />
+
+          <div class="summary-row summary-total">
+            <span>Estimated price</span>
+            <strong id="sum-price">$0.00</strong>
+          </div>
+
+          <p class="summary-note">
+            Final price confirmed at pickup. Includes customs handling for international shipments.
+          </p>
+        </div>
+
+        <div class="trust-badge">
+          <div class="trust-icon">🛡️</div>
+          <div>
+            <strong>Secure & Insured</strong>
+            <p>Up to $10,000 coverage included</p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo logo-footer">
+          <span class="logo-mark">A</span>
+          <span class="logo-text">AnchorPoint</span>
+        </a>
+        <p class="footer-tag">Global delivery, made simple.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="track.html">Track Shipment</a>
+        <a href="#faq">FAQ</a>
+        <a href="#terms">Terms</a>
+        <a href="#privacy">Privacy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@anchorpoint.com">hello@anchorpoint.com</a>
+        <a href="tel:+2348000000000">+234 800 000 0000</a>
+        <p class="footer-addr">Lagos · London · New York</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 AnchorPoint. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/ship.js"></script>
+</body>
+</html>
