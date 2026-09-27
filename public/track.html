@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Shipment — AnchorPoint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/track.css" />
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AnchorPoint</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="ship.html">Ship</a>
+        <a href="track.html" class="active">Track</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#login" class="btn btn-ghost">Login</a>
+        <a href="#signup" class="btn btn-accent">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ TRACK HERO ═══ -->
+  <section class="track-hero">
+    <div class="container">
+      <h1>Track your shipment</h1>
+      <p>Enter your tracking number to see live status and location.</p>
+
+      <form class="track-search" id="track-form">
+        <input
+          type="text"
+          id="track-input"
+          placeholder="e.g. AP123456789NG"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn btn-accent btn-lg">Track Package</button>
+      </form>
+
+      <p class="track-hint">Demo: try <strong>AP123456789NG</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══ RESULT ═══ -->
+  <main class="track-main">
+    <div class="container">
+
+      <!-- Error -->
+      <div class="track-error" id="track-error" hidden>
+        <div class="error-icon">⚠️</div>
+        <h2>Shipment not found</h2>
+        <p>We couldn't find a shipment with that tracking number. Please check and try again.</p>
+      </div>
+
+      <!-- Result -->
+      <div class="track-result" id="track-result" hidden>
+
+        <!-- Top summary card -->
+        <div class="result-head">
+          <div class="result-head-left">
+            <span class="status-pill" id="result-status-pill">In Transit</span>
+            <h2 id="result-tracking">AP123456789NG</h2>
+            <p id="result-service">International Express · 2.5 kg</p>
+          </div>
+          <div class="result-head-right">
+            <span class="eta-label">Estimated delivery</span>
+            <strong id="result-eta">15 Jan 2026</strong>
+          </div>
+        </div>
+
+        <!-- Route -->
+        <div class="route-card">
+          <div class="route-point">
+            <span class="route-dot origin"></span>
+            <div>
+              <small>From</small>
+              <strong id="route-from">Lagos, Nigeria</strong>
+            </div>
+          </div>
+          <div class="route-line"></div>
+          <div class="route-point">
+            <span class="route-dot dest"></span>
+            <div>
+              <small>To</small>
+              <strong id="route-to">New York, United States</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-card">
+          <h3>Shipment progress</h3>
+          <ul class="timeline" id="timeline"></ul>
+        </div>
+
+        <!-- Details -->
+        <div class="details-grid">
+          <div class="detail-card">
+            <h4>Sender</h4>
+            <p id="detail-sender">Nuhu Abdulkarim<br />Lagos, Nigeria</p>
+          </div>
+          <div class="detail-card">
+            <h4>Receiver</h4>
+            <p id="detail-receiver">Jane Smith<br />New York, United States</p>
+          </div>
+          <div class="detail-card">
+            <h4>Package</h4>
+            <p id="detail-package">2.5 kg · 30×20×15 cm<br />Documents</p>
+          </div>
+          <div class="detail-card">
+            <h4>Declared value</h4>
+            <p id="detail-value">$200.00 USD</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo logo-footer">
+          <span class="logo-mark">A</span>
+          <span class="logo-text">AnchorPoint</span>
+        </a>
+        <p class="footer-tag">Global delivery, made simple.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="track.html">Track Shipment</a>
+        <a href="#faq">FAQ</a>
+        <a href="#terms">Terms</a>
+        <a href="#privacy">Privacy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@anchorpoint.com">hello@anchorpoint.com</a>
+        <a href="tel:+2348000000000">+234 800 000 0000</a>
+        <p class="footer-addr">Lagos · London · New York</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 AnchorPoint. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/track.js"></script>
+</body>
+</html>

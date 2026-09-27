@@ -1,0 +1,362 @@
+/* ═══════════════════════════════════════════
+   ANCHORPOINT — Tracking Page
+   ═══════════════════════════════════════════ */
+
+   .main-nav a.active { color: var(--accent); font-weight: 700; }
+
+   /* ═══ HERO ═══ */
+   .track-hero {
+     background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+     color: var(--white);
+     padding: 72px 0 64px;
+     text-align: center;
+   }
+   
+   .track-hero h1 {
+     font-size: 44px;
+     font-weight: 800;
+     letter-spacing: -1.2px;
+     margin-bottom: 12px;
+   }
+   
+   .track-hero p {
+     color: rgba(255, 255, 255, 0.75);
+     font-size: 17px;
+     margin-bottom: 36px;
+   }
+   
+   .track-search {
+     display: flex;
+     gap: 12px;
+     max-width: 640px;
+     margin: 0 auto;
+   }
+   
+   .track-search input {
+     flex: 1;
+     padding: 18px 22px;
+     font-size: 16px;
+     border: 2px solid transparent;
+     border-radius: 12px;
+     font-family: inherit;
+     background: var(--white);
+     color: var(--text);
+     transition: border-color 0.2s, box-shadow 0.2s;
+   }
+   
+   .track-search input:focus {
+     outline: none;
+     border-color: var(--accent);
+     box-shadow: 0 0 0 4px rgba(255, 107, 26, 0.2);
+   }
+   
+   .track-hint {
+     font-size: 13px;
+     color: rgba(255, 255, 255, 0.5);
+     margin-top: 16px;
+   }
+   .track-hint strong { color: var(--accent); }
+   
+   /* ═══ MAIN ═══ */
+   .track-main {
+     padding: 56px 0 96px;
+     min-height: 400px;
+   }
+   
+   /* Error */
+   .track-error {
+     max-width: 480px;
+     margin: 40px auto;
+     text-align: center;
+     background: var(--white);
+     padding: 48px 32px;
+     border-radius: 16px;
+     box-shadow: var(--shadow-md);
+     border: 1px solid var(--border);
+   }
+   .error-icon { font-size: 56px; margin-bottom: 16px; }
+   .track-error h2 {
+     font-size: 22px;
+     color: var(--navy);
+     margin-bottom: 8px;
+   }
+   .track-error p { color: var(--muted); font-size: 15px; }
+   
+   /* ═══ RESULT ═══ */
+   .track-result {
+     max-width: 880px;
+     margin: 0 auto;
+     display: flex;
+     flex-direction: column;
+     gap: 24px;
+   }
+   
+   /* Result header */
+   .result-head {
+     background: var(--white);
+     border-radius: 16px;
+     padding: 28px 32px;
+     box-shadow: var(--shadow-md);
+     border: 1px solid var(--border);
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     flex-wrap: wrap;
+     gap: 20px;
+   }
+   
+   .status-pill {
+     display: inline-block;
+     background: #FEF3C7;
+     color: #92400E;
+     padding: 6px 14px;
+     border-radius: 999px;
+     font-size: 12px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.6px;
+     margin-bottom: 12px;
+   }
+   
+   .status-pill.delivered {
+     background: #D1FAE5;
+     color: #065F46;
+   }
+   
+   .status-pill.pending {
+     background: #E0E7FF;
+     color: #3730A3;
+   }
+   
+   .result-head h2 {
+     font-size: 26px;
+     font-weight: 800;
+     color: var(--navy);
+     letter-spacing: -0.5px;
+     margin-bottom: 4px;
+   }
+   
+   .result-head p {
+     color: var(--muted);
+     font-size: 14px;
+   }
+   
+   .result-head-right {
+     text-align: right;
+   }
+   
+   .eta-label {
+     display: block;
+     font-size: 12px;
+     color: var(--muted);
+     text-transform: uppercase;
+     letter-spacing: 0.6px;
+     margin-bottom: 4px;
+   }
+   .result-head-right strong {
+     font-size: 20px;
+     font-weight: 800;
+     color: var(--accent);
+   }
+   
+   /* Route */
+   .route-card {
+     background: var(--white);
+     border-radius: 16px;
+     padding: 24px 32px;
+     box-shadow: var(--shadow-sm);
+     border: 1px solid var(--border);
+     display: flex;
+     align-items: center;
+     gap: 20px;
+   }
+   
+   .route-point {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     flex: 1;
+   }
+   
+   .route-dot {
+     width: 14px;
+     height: 14px;
+     border-radius: 50%;
+     flex-shrink: 0;
+   }
+   .route-dot.origin { background: var(--navy); }
+   .route-dot.dest   { background: var(--accent); }
+   
+   .route-point small {
+     display: block;
+     font-size: 11px;
+     color: var(--muted);
+     text-transform: uppercase;
+     letter-spacing: 0.6px;
+     margin-bottom: 2px;
+   }
+   .route-point strong {
+     font-size: 15px;
+     color: var(--text);
+   }
+   
+   .route-line {
+     flex: 1;
+     height: 2px;
+     background: linear-gradient(90deg, var(--navy), var(--accent));
+     border-radius: 1px;
+     position: relative;
+   }
+   .route-line::after {
+     content: "✈";
+     position: absolute;
+     top: -12px;
+     left: 50%;
+     transform: translateX(-50%);
+     background: var(--white);
+     padding: 0 6px;
+     color: var(--accent);
+     font-size: 14px;
+   }
+   
+   /* Timeline */
+   .timeline-card {
+     background: var(--white);
+     border-radius: 16px;
+     padding: 32px;
+     box-shadow: var(--shadow-sm);
+     border: 1px solid var(--border);
+   }
+   
+   .timeline-card h3 {
+     font-size: 18px;
+     color: var(--navy);
+     font-weight: 700;
+     margin-bottom: 24px;
+   }
+   
+   .timeline {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+     position: relative;
+   }
+   
+   .timeline li {
+     position: relative;
+     padding-left: 44px;
+     padding-bottom: 28px;
+   }
+   
+   .timeline li:last-child { padding-bottom: 0; }
+   
+   .timeline li::before {
+     content: "";
+     position: absolute;
+     left: 10px;
+     top: 24px;
+     bottom: -4px;
+     width: 2px;
+     background: var(--border);
+   }
+   
+   .timeline li:last-child::before { display: none; }
+   
+   .timeline li.done::before { background: var(--success); }
+   .timeline li.current::before { background: var(--accent); }
+   
+   .timeline-dot {
+     position: absolute;
+     left: 0;
+     top: 4px;
+     width: 22px;
+     height: 22px;
+     border-radius: 50%;
+     background: var(--border);
+     display: grid;
+     place-items: center;
+     color: var(--white);
+     font-size: 12px;
+     font-weight: 800;
+     z-index: 1;
+   }
+   
+   .timeline li.done .timeline-dot { background: var(--success); }
+   .timeline li.current .timeline-dot {
+     background: var(--accent);
+     box-shadow: 0 0 0 4px rgba(255, 107, 26, 0.2);
+   }
+   
+   .timeline-content h4 {
+     font-size: 15px;
+     font-weight: 700;
+     color: var(--text);
+     margin-bottom: 4px;
+   }
+   
+   .timeline li.current .timeline-content h4 { color: var(--accent); }
+   
+   .timeline-meta {
+     font-size: 13px;
+     color: var(--muted);
+     display: flex;
+     gap: 12px;
+     flex-wrap: wrap;
+   }
+   .timeline-meta .loc { font-weight: 600; color: var(--navy); }
+   
+   /* Details grid */
+   .details-grid {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 16px;
+   }
+   
+   .detail-card {
+     background: var(--white);
+     border-radius: 12px;
+     padding: 20px;
+     border: 1px solid var(--border);
+   }
+   
+   .detail-card h4 {
+     font-size: 11px;
+     text-transform: uppercase;
+     letter-spacing: 0.8px;
+     color: var(--muted);
+     margin-bottom: 8px;
+     font-weight: 700;
+   }
+   
+   .detail-card p {
+     font-size: 14px;
+     color: var(--text);
+     line-height: 1.5;
+   }
+   
+   /* Responsive */
+   @media (max-width: 900px) {
+     .track-hero h1 { font-size: 32px; }
+     .track-search { flex-direction: column; }
+     .route-card { flex-direction: column; align-items: stretch; }
+     .route-line { height: 40px; width: 2px; align-self: center; background: linear-gradient(180deg, var(--navy), var(--accent)); }
+     .route-line::after { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+     .details-grid { grid-template-columns: 1fr 1fr; }
+   }
+   
+   @media (max-width: 520px) {
+     .result-head { flex-direction: column; align-items: flex-start; }
+     .result-head-right { text-align: left; }
+     .details-grid { grid-template-columns: 1fr; }
+   }
+
+   /* Pulse animation on current event */
+@keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 107, 26, 0.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(255, 107, 26, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 26, 0); }
+  }
+  
+  .timeline li.current .timeline-dot {
+    animation: pulse-ring 2s infinite;
+  }
