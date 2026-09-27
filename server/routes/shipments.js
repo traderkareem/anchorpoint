@@ -1,24 +1,20 @@
 /* ═══════════════════════════════════════════
-   ANCHORPOINT — Shipments API Routes
+   ANCHORPOINT — Shipments API (MongoDB)
    ═══════════════════════════════════════════ */
 
    const express = require('express');
    const router = express.Router();
-   
-   // ═══ IN-MEMORY STORE ═══
-   // (Will move to MongoDB in Step 7)
-   const shipments = [];
+   const Shipment = require('../models/Shipment');
    
    // ═══ HELPERS ═══
    function generateTrackingNumber() {
      const year = new Date().getFullYear().toString().slice(-2);
-     const random = Math.floor(100000 + Math.random() * 900000); // 6 digits
+     const random = Math.floor(100000 + Math.random() * 900000);
      return `AP${year}${random}NG`;
    }
    
    function validateShipment(body) {
      const errors = [];
-   
      const required = [
        'senderName', 'senderEmail', 'senderPhone',
        'senderCountry', 'senderCity', 'senderAddress',
@@ -57,136 +53,106 @@
    }
    
    function buildTrackingEvents() {
-     const now = new Date();
+     const now = new Date().toISOString();
      return [
-       {
-         status: 'Shipment created',
-         location: 'AnchorPoint HQ',
-         time: now.toISOString(),
-         state: 'done'
-       },
-       {
-         status: 'Awaiting pickup',
-         location: '—',
-         time: 'Pending',
-         state: 'current'
-       },
-       {
-         status: 'Picked up',
-         location: '—',
-         time: 'Pending',
-         state: 'pending'
-       },
-       {
-         status: 'In transit',
-         location: '—',
-         time: 'Pending',
-         state: 'pending'
-       },
-       {
-         status: 'Out for delivery',
-         location: '—',
-         time: 'Pending',
-         state: 'pending'
-       },
-       {
-         status: 'Delivered',
-         location: '—',
-         time: 'Pending',
-         state: 'pending'
-       }
+       { status: 'Shipment created',  location: 'AnchorPoint HQ', time: now,       state: 'done' },
+       { status: 'Awaiting pickup',   location: '—',              time: 'Pending', state: 'current' },
+       { status: 'Picked up',         location: '—',              time: 'Pending', state: 'pending' },
+       { status: 'In transit',        location: '—',              time: 'Pending', state: 'pending' },
+       { status: 'Out for delivery',  location: '—',              time: 'Pending', state: 'pending' },
+       { status: 'Delivered',         location: '—',              time: 'Pending', state: 'pending' }
      ];
    }
    
    // ═══ ROUTES ═══
    
-   // POST /api/shipments — create a new shipment
-   router.post('/', (req, res) => {
-     const errors = validateShipment(req.body);
+   router.post('/', async (req, res) => {
+     try {
+       const errors = validateShipment(req.body);
+       if (errors.length > 0) {
+         return res.status(400).json({ error: 'Validation failed', details: errors });
+       }
    
-     if (errors.length > 0) {
-       return res.status(400).json({
-         error: 'Validation failed',
-         details: errors
+       const weight = parseFloat(req.body.packageWeight);
+       const price = calculatePrice(weight, req.body.serviceType);
+   
+       let trackingNumber;
+       let exists = true;
+       while (exists) {
+         trackingNumber = generateTrackingNumber();
+         exists = await Shipment.exists({ trackingNumber });
+       }
+   
+       const shipment = await Shipment.create({
+         trackingNumber,
+         status: 'pending',
+         statusLabel: 'Pending Pickup',
+         sender: {
+           name:    req.body.senderName,
+           email:   req.body.senderEmail,
+           phone:   req.body.senderPhone,
+           country: req.body.senderCountry,
+           city:    req.body.senderCity,
+           address: req.body.senderAddress
+         },
+         receiver: {
+           name:    req.body.receiverName,
+           email:   req.body.receiverEmail,
+           phone:   req.body.receiverPhone,
+           country: req.body.receiverCountry,
+           city:    req.body.receiverCity,
+           address: req.body.receiverAddress
+         },
+         package: {
+           weight,
+           length:        parseFloat(req.body.packageLength),
+           width:         parseFloat(req.body.packageWidth),
+           height:        parseFloat(req.body.packageHeight),
+           description:   req.body.packageDescription,
+           declaredValue: parseFloat(req.body.packageValue) || 0
+         },
+         service:  req.body.serviceType,
+         price,
+         currency: 'USD',
+         events:   buildTrackingEvents()
        });
+   
+       console.log(`✅ New shipment: ${shipment.trackingNumber}`);
+   
+       res.status(201).json({
+         success: true,
+         trackingNumber: shipment.trackingNumber,
+         estimatedPrice: `$${price.toFixed(2)}`,
+         shipment
+       });
+     } catch (err) {
+       console.error('Create shipment error:', err);
+       res.status(500).json({ error: 'Failed to create shipment', details: err.message });
      }
-   
-     const weight = parseFloat(req.body.packageWeight);
-     const price = calculatePrice(weight, req.body.serviceType);
-   
-     const shipment = {
-       trackingNumber: generateTrackingNumber(),
-       status: 'pending',
-       statusLabel: 'Pending Pickup',
-       createdAt: new Date().toISOString(),
-   
-       sender: {
-         name: req.body.senderName,
-         email: req.body.senderEmail,
-         phone: req.body.senderPhone,
-         country: req.body.senderCountry,
-         city: req.body.senderCity,
-         address: req.body.senderAddress
-       },
-   
-       receiver: {
-         name: req.body.receiverName,
-         email: req.body.receiverEmail,
-         phone: req.body.receiverPhone,
-         country: req.body.receiverCountry,
-         city: req.body.receiverCity,
-         address: req.body.receiverAddress
-       },
-   
-       package: {
-         weight: weight,
-         length: parseFloat(req.body.packageLength),
-         width: parseFloat(req.body.packageWidth),
-         height: parseFloat(req.body.packageHeight),
-         description: req.body.packageDescription,
-         declaredValue: parseFloat(req.body.packageValue) || 0
-       },
-   
-       service: req.body.serviceType,
-       price: price,
-       currency: 'USD',
-   
-       events: buildTrackingEvents()
-     };
-   
-     shipments.push(shipment);
-   
-     console.log(`✅ New shipment created: ${shipment.trackingNumber}`);
-   
-     res.status(201).json({
-       success: true,
-       trackingNumber: shipment.trackingNumber,
-       estimatedPrice: `$${price.toFixed(2)}`,
-       shipment
-     });
    });
    
-   // GET /api/shipments — list all shipments (admin)
-   router.get('/', (req, res) => {
-     res.json({
-       count: shipments.length,
-       shipments
-     });
+   router.get('/', async (req, res) => {
+     try {
+       const shipments = await Shipment.find().sort({ createdAt: -1 }).limit(100);
+       res.json({ count: shipments.length, shipments });
+     } catch (err) {
+       res.status(500).json({ error: 'Failed to fetch shipments', details: err.message });
+     }
    });
    
-   // GET /api/shipments/:tracking — look up by tracking number
-   router.get('/:tracking', (req, res) => {
-     const tracking = req.params.tracking.toUpperCase();
-     const shipment = shipments.find(s => s.trackingNumber === tracking);
+   router.get('/:tracking', async (req, res) => {
+     try {
+       const tracking = req.params.tracking.toUpperCase();
+       const shipment = await Shipment.findOne({ trackingNumber: tracking });
    
-     if (!shipment) {
-       return res.status(404).json({
-         error: 'Shipment not found',
-         trackingNumber: tracking
-       });
+       if (!shipment) {
+         return res.status(404).json({ error: 'Shipment not found', trackingNumber: tracking });
+       }
+   
+       res.json(shipment);
+     } catch (err) {
+       res.status(500).json({ error: 'Lookup failed', details: err.message });
      }
-   
-     res.json(shipment);
    });
    
    module.exports = router;

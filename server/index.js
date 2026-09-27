@@ -1,10 +1,11 @@
 /* ═══════════════════════════════════════════
-   ANCHORPOINT — Backend Server
-   Node.js + Express
+   ANCHORPOINT — Backend Server (with MongoDB)
    ═══════════════════════════════════════════ */
 
+   require('dotenv').config();
    const express = require('express');
    const cors = require('cors');
+   const mongoose = require('mongoose');
    const path = require('path');
    
    const app = express();
@@ -14,37 +15,48 @@
    app.use(cors());
    app.use(express.json());
    app.use(express.urlencoded({ extended: true }));
-   
-   // Serve static frontend from /public
    app.use(express.static(path.join(__dirname, '..', 'public')));
    
-   // Request logger (simple)
+   // Request logger
    app.use((req, res, next) => {
      console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
      next();
    });
    
-   // ═══ IN-MEMORY STORE (Step 6) ═══
-   // This will be replaced with MongoDB in Step 7
-   const shipments = [];
+   // ═══ MONGODB CONNECTION ═══
+   const MONGODB_URI = process.env.MONGODB_URI;
+   
+   if (!MONGODB_URI) {
+     console.error('❌ MONGODB_URI missing in .env');
+     process.exit(1);
+   }
+   
+   mongoose.connect(MONGODB_URI, {
+     useNewUrlParser: true,
+     useUnifiedTopology: true
+   })
+   .then(() => console.log('✅ MongoDB connected'))
+   .catch(err => {
+     console.error('❌ MongoDB connection error:', err.message);
+     process.exit(1);
+   });
    
    // ═══ ROUTES ═══
    const shipmentsRouter = require('./routes/shipments');
    
-   // Health check
    app.get('/api/health', (req, res) => {
+     const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
      res.json({
        status: 'ok',
        service: 'AnchorPoint API',
        time: new Date().toISOString(),
-       shipments: shipments.length
+       database: states[mongoose.connection.readyState] || 'unknown'
      });
    });
    
-   // Mount shipments routes
    app.use('/api/shipments', shipmentsRouter);
    
-   // Fallback: serve index.html for unknown routes (SPA-style)
+   // Fallback for frontend
    app.get('*', (req, res, next) => {
      if (req.url.startsWith('/api/')) return next();
      res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
@@ -72,4 +84,4 @@
      console.log('');
    });
    
-   module.exports = { app, shipments };
+   module.exports = app;
