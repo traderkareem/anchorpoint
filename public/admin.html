@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — AnchorPoint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AnchorPoint</span>
+        <span class="admin-badge">ADMIN</span>
+      </a>
+      <div class="admin-header-actions">
+        <a href="index.html" class="btn btn-ghost">View Site</a>
+        <button id="refresh-btn" class="btn btn-accent">Refresh</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- ═══ STATS ═══ -->
+    <div class="admin-stats" id="admin-stats">
+      <div class="stat-card">
+        <span class="stat-label">Total Shipments</span>
+        <strong class="stat-value" id="stat-total">—</strong>
+      </div>
+      <div class="stat-card stat-pending">
+        <span class="stat-label">Pending</span>
+        <strong class="stat-value" id="stat-pending">—</strong>
+      </div>
+      <div class="stat-card stat-transit">
+        <span class="stat-label">In Transit</span>
+        <strong class="stat-value" id="stat-transit">—</strong>
+      </div>
+      <div class="stat-card stat-delivered">
+        <span class="stat-label">Delivered</span>
+        <strong class="stat-value" id="stat-delivered">—</strong>
+      </div>
+    </div>
+
+    <!-- ═══ FILTERS ═══ -->
+    <div class="admin-filters">
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-status="all">All</button>
+        <button class="filter-tab" data-status="pending">Pending</button>
+        <button class="filter-tab" data-status="in_transit">In Transit</button>
+        <button class="filter-tab" data-status="delivered">Delivered</button>
+      </div>
+      <input
+        type="text"
+        id="search-input"
+        class="admin-search"
+        placeholder="Search by tracking number..."
+      />
+    </div>
+
+    <!-- ═══ TABLE ═══ -->
+    <div class="admin-table-wrap">
+      <div id="loading" class="admin-loading">Loading shipments...</div>
+      <div id="empty-state" class="admin-empty" hidden>
+        <p>No shipments found.</p>
+      </div>
+
+      <table class="admin-table" id="shipments-table" hidden>
+        <thead>
+          <tr>
+            <th>Tracking</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Service</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="shipments-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- ═══ DETAIL DRAWER ═══ -->
+  <div class="drawer-overlay" id="drawer-overlay" hidden></div>
+  <aside class="drawer" id="drawer" hidden>
+    <div class="drawer-head">
+      <div>
+        <h2 id="drawer-tracking">—</h2>
+        <p id="drawer-service">—</p>
+      </div>
+      <button class="drawer-close" id="drawer-close">✕</button>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- Route -->
+      <div class="drawer-section">
+        <h4>Route</h4>
+        <p><strong>From:</strong> <span id="drawer-from">—</span></p>
+        <p><strong>To:</strong> <span id="drawer-to">—</span></p>
+      </div>
+
+      <!-- Package -->
+      <div class="drawer-section">
+        <h4>Package</h4>
+        <p id="drawer-package">—</p>
+      </div>
+
+      <!-- Add event -->
+      <div class="drawer-section">
+        <h4>Update status</h4>
+        <div class="drawer-form">
+          <label>Event</label>
+          <select id="event-status">
+            <option value="">— Select event —</option>
+            <option value="Picked up">Picked up</option>
+            <option value="Departed origin">Departed origin</option>
+            <option value="In transit">In transit</option>
+            <option value="Customs clearance">Customs clearance</option>
+            <option value="Out for delivery">Out for delivery</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+
+          <label>Location</label>
+          <input type="text" id="event-location" placeholder="e.g. Lagos, Nigeria" />
+
+          <button class="btn btn-accent" id="add-event-btn">Add tracking event</button>
+        </div>
+        <p class="drawer-msg" id="drawer-msg"></p>
+      </div>
+
+      <!-- Events -->
+      <div class="drawer-section">
+        <h4>History</h4>
+        <ul class="drawer-events" id="drawer-events"></ul>
+      </div>
+
+      <!-- Delete -->
+      <div class="drawer-section drawer-danger">
+        <button class="btn btn-danger" id="delete-btn">Delete shipment</button>
+      </div>
+
+    </div>
+  </aside>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
