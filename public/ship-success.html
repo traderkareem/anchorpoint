@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipment Created — AnchorPoint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/success.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AnchorPoint</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="ship.html">Ship</a>
+        <a href="track.html">Track</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#login" class="btn btn-ghost">Login</a>
+        <a href="#signup" class="btn btn-accent">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="success-main">
+    <div class="container">
+      <div class="success-card">
+
+        <div class="success-icon">
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" stroke="#10B981"/>
+            <path d="m9 12 2 2 4-4" stroke="#10B981"/>
+          </svg>
+        </div>
+
+        <h1>Shipment created successfully</h1>
+        <p class="success-sub">Your package has been registered. Save your tracking number below.</p>
+
+        <div class="tracking-box">
+          <span class="tracking-label">Tracking number</span>
+          <div class="tracking-value-row">
+            <strong id="tracking-number">—</strong>
+            <button id="copy-btn" class="copy-btn" title="Copy">Copy</button>
+          </div>
+          <p class="tracking-note">You'll need this to track your package.</p>
+        </div>
+
+        <div class="success-actions">
+          <a id="track-btn" href="track.html" class="btn btn-accent btn-lg">Track this shipment</a>
+          <a href="ship.html" class="btn btn-outline-navy btn-lg">Ship another package</a>
+        </div>
+
+        <p class="success-help">
+          Need help? <a href="mailto:hello@anchorpoint.com">hello@anchorpoint.com</a>
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo logo-footer">
+          <span class="logo-mark">A</span>
+          <span class="logo-text">AnchorPoint</span>
+        </a>
+        <p class="footer-tag">Global delivery, made simple.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="track.html">Track Shipment</a>
+        <a href="#faq">FAQ</a>
+        <a href="#terms">Terms</a>
+        <a href="#privacy">Privacy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@anchorpoint.com">hello@anchorpoint.com</a>
+        <a href="tel:+2348000000000">+234 800 000 0000</a>
+        <p class="footer-addr">Lagos · London · New York</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 AnchorPoint. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/success.js"></script>
+</body>
+</html>
