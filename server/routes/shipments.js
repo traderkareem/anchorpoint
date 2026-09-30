@@ -5,6 +5,7 @@
    const express = require('express');
    const router = express.Router();
    const Shipment = require('../models/Shipment');
+   const authMiddleware = require('./auth');
    
    // ═══ HELPERS ═══
    function generateTrackingNumber() {
@@ -66,8 +67,26 @@
    
    // ═══ ROUTES ═══
    
-   // POST /api/shipments — create a new shipment
-   router.post('/', async (req, res) => {
+   // ★ This MUST come before /:tracking, otherwise "user" would be treated as a tracking number
+   
+   // GET /api/shipments/user/mine — logged-in user's shipments
+   router.get('/user/mine', authMiddleware.requireAuth, async function (req, res) {
+     try {
+       const shipments = await Shipment
+         .find({ userId: req.userId })
+         .sort({ createdAt: -1 })
+         .limit(100);
+   
+       res.json({ count: shipments.length, shipments: shipments });
+   
+     } catch (err) {
+       console.error('My shipments error:', err);
+       res.status(500).json({ error: 'Failed to fetch shipments', details: err.message });
+     }
+   });
+   
+   // POST /api/shipments — create (auth optional)
+   router.post('/', authMiddleware.optionalAuth, async function (req, res) {
      try {
        const errors = validateShipment(req.body);
        if (errors.length > 0) {
@@ -77,7 +96,6 @@
        const weight = parseFloat(req.body.packageWeight);
        const price = calculatePrice(weight, req.body.serviceType);
    
-       // Generate unique tracking number
        let trackingNumber;
        let exists = true;
        while (exists) {
@@ -89,6 +107,7 @@
          trackingNumber: trackingNumber,
          status: 'pending',
          statusLabel: 'Pending Pickup',
+         userId: req.userId || null,
          sender: {
            name:    req.body.senderName,
            email:   req.body.senderEmail,
@@ -119,7 +138,7 @@
          events:   buildTrackingEvents()
        });
    
-       console.log('✅ New shipment: ' + shipment.trackingNumber);
+       console.log('✅ New shipment: ' + shipment.trackingNumber + (req.userId ? ' (user ' + req.userId + ')' : ' (guest)'));
    
        res.status(201).json({
          success: true,
@@ -134,24 +153,20 @@
      }
    });
    
-   // GET /api/shipments — list all (with optional filters)
-   router.get('/', async (req, res) => {
+   // GET /api/shipments — list all (admin/debug)
+   router.get('/', async function (req, res) {
      try {
        const filter = {};
    
-       // Optional status filter: ?status=pending
        if (req.query.status && req.query.status !== 'all') {
          filter.status = req.query.status;
        }
-   
-       // Optional search by tracking number: ?search=AP26
        if (req.query.search) {
          filter.trackingNumber = { $regex: req.query.search.toUpperCase(), $options: 'i' };
        }
    
        const shipments = await Shipment.find(filter).sort({ createdAt: -1 }).limit(200);
    
-       // Stats
        const stats = {
          total:      await Shipment.countDocuments(),
          pending:    await Shipment.countDocuments({ status: 'pending' }),
@@ -167,8 +182,8 @@
      }
    });
    
-   // GET /api/shipments/:tracking — look up by tracking number
-   router.get('/:tracking', async (req, res) => {
+   // GET /api/shipments/:tracking — lookup by tracking number
+   router.get('/:tracking', async function (req, res) {
      try {
        const tracking = req.params.tracking.toUpperCase();
        const shipment = await Shipment.findOne({ trackingNumber: tracking });
@@ -185,8 +200,8 @@
      }
    });
    
-   // PATCH /api/shipments/:tracking — update status + add tracking event
-   router.patch('/:tracking', async (req, res) => {
+   // PATCH /api/shipments/:tracking — update status + add event
+   router.patch('/:tracking', async function (req, res) {
      try {
        const tracking = req.params.tracking.toUpperCase();
        const shipment = await Shipment.findOne({ trackingNumber: tracking });
@@ -203,65 +218,59 @@
        if (statusLabel) shipment.statusLabel = statusLabel;
    
        if (newEvent && newEvent.status) {
-        // Mark all previous "current" events as "done"
-        shipment.events.forEach(function (evt) {
-          if (evt.state === 'current') evt.state = 'done';
-        });
-      
-        const now = new Date().toISOString();
-      
-        // Try to find an existing PENDING event with the same status
-        // (this happens because buildTrackingEvents() pre-creates them)
-        const existingPendingIndex = shipment.events.findIndex(function (e) {
-          return e.state === 'pending' &&
-                 e.status.toLowerCase() === newEvent.status.toLowerCase();
-        });
-      
-        if (existingPendingIndex !== -1) {
-          // UPDATE the existing pending event
-          const event = shipment.events[existingPendingIndex];
-          event.location = newEvent.location || '—';
-          event.time = now;
-          event.state = 'current';
-      
-          // If delivered → mark done
-          if (newEvent.status.toLowerCase().indexOf('delivered') !== -1) {
-            event.state = 'done';
-            shipment.status = 'delivered';
-            shipment.statusLabel = 'Delivered';
-          } else {
-            shipment.status = 'in_transit';
-            shipment.statusLabel = newEvent.status;
-          }
-        } else {
-          // Custom event — insert before the first pending
-          const event = {
-            status: newEvent.status,
-            location: newEvent.location || '—',
-            time: now,
-            state: 'current'
-          };
-      
-          const insertIndex = shipment.events.findIndex(function (e) {
-            return e.state === 'pending';
-          });
-      
-          if (insertIndex === -1) {
-            shipment.events.push(event);
-          } else {
-            shipment.events.splice(insertIndex, 0, event);
-          }
-      
-          if (newEvent.status.toLowerCase().indexOf('delivered') !== -1) {
-            event.state = 'done';
-            shipment.status = 'delivered';
-            shipment.statusLabel = 'Delivered';
-          } else {
-            shipment.status = 'in_transit';
-            shipment.statusLabel = newEvent.status;
-          }
-        }
-      }
+         shipment.events.forEach(function (evt) {
+           if (evt.state === 'current') evt.state = 'done';
+         });
+   
+         const now = new Date().toISOString();
+   
+         const existingPendingIndex = shipment.events.findIndex(function (e) {
+           return e.state === 'pending' &&
+                  e.status.toLowerCase() === newEvent.status.toLowerCase();
+         });
+   
+         if (existingPendingIndex !== -1) {
+           const event = shipment.events[existingPendingIndex];
+           event.location = newEvent.location || '—';
+           event.time = now;
+           event.state = 'current';
+   
+           if (newEvent.status.toLowerCase().indexOf('delivered') !== -1) {
+             event.state = 'done';
+             shipment.status = 'delivered';
+             shipment.statusLabel = 'Delivered';
+           } else {
+             shipment.status = 'in_transit';
+             shipment.statusLabel = newEvent.status;
+           }
+         } else {
+           const event = {
+             status: newEvent.status,
+             location: newEvent.location || '—',
+             time: now,
+             state: 'current'
+           };
+   
+           const insertIndex = shipment.events.findIndex(function (e) {
+             return e.state === 'pending';
+           });
+   
+           if (insertIndex === -1) {
+             shipment.events.push(event);
+           } else {
+             shipment.events.splice(insertIndex, 0, event);
+           }
+   
+           if (newEvent.status.toLowerCase().indexOf('delivered') !== -1) {
+             event.state = 'done';
+             shipment.status = 'delivered';
+             shipment.statusLabel = 'Delivered';
+           } else {
+             shipment.status = 'in_transit';
+             shipment.statusLabel = newEvent.status;
+           }
+         }
+       }
    
        await shipment.save();
    
@@ -275,7 +284,7 @@
    });
    
    // DELETE /api/shipments/:tracking
-   router.delete('/:tracking', async (req, res) => {
+   router.delete('/:tracking', async function (req, res) {
      try {
        const tracking = req.params.tracking.toUpperCase();
        const result = await Shipment.findOneAndDelete({ trackingNumber: tracking });

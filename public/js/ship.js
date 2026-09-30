@@ -193,9 +193,16 @@ async function showConfirmation(data) {
   submitBtn.textContent = 'Saving shipment...';
 
   try {
+    // Include auth token if user is logged in
+    const token = localStorage.getItem('anchorpoint_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = 'Bearer ' + token;
+    }
+
     const response = await fetch('/api/shipments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: headers,
       body: JSON.stringify(data)
     });
 
