@@ -1,0 +1,186 @@
+/* ═══════════════════════════════════════════
+   ANCHORPOINT — My Shipments Page
+   ═══════════════════════════════════════════ */
+
+   .my-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: var(--white);
+    padding: 48px 0;
+  }
+  
+  .my-hero-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .my-hero h1 {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+  }
+  
+  .my-hero p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 15px;
+  }
+  
+  /* Stats */
+  .my-main {
+    padding: 40px 0 96px;
+  }
+  
+  .my-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .my-stat {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 18px 22px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--navy);
+  }
+  
+  .my-stat-pending  { border-left-color: #F59E0B; }
+  .my-stat-transit  { border-left-color: var(--accent); }
+  .my-stat-delivered { border-left-color: var(--success); }
+  
+  .my-stat-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  
+  .my-stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+  }
+  
+  /* Loading / Empty */
+  .my-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  
+  .my-empty {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 72px 32px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .my-empty-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+  
+  .my-empty h2 {
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  
+  .my-empty p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  
+  /* List */
+  .my-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .ship-card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1fr 1fr auto;
+    align-items: center;
+    gap: 20px;
+    transition: box-shadow 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  
+  .ship-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  .ship-tracking {
+    font-family: "Courier New", monospace;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  
+  .ship-route {
+    font-size: 14px;
+    color: var(--text);
+  }
+  .ship-route small {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  
+  .ship-service {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  
+  .ship-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  
+  .ship-status {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  
+  .ship-status.pending    { background: #FEF3C7; color: #92400E; }
+  .ship-status.in_transit { background: #FFEDD5; color: #9A3412; }
+  .ship-status.delivered  { background: #D1FAE5; color: #065F46; }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .my-stats { grid-template-columns: 1fr 1fr; }
+  
+    .ship-card {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  
+    .ship-route small { display: inline; margin-right: 4px; }
+  }

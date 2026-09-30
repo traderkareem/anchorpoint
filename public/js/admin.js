@@ -5,6 +5,32 @@
    let currentFilter = 'all';
    let currentSearch = '';
    
+   // ═══ ADMIN GUARD ═══
+// Redirect to login if not authenticated as admin
+(function () {
+  const token = localStorage.getItem('anchorpoint_token');
+  const userStr = localStorage.getItem('anchorpoint_user');
+
+  if (!token || !userStr) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const user = JSON.parse(userStr);
+    if (user.role !== 'admin') {
+      // Logged in but not admin
+      alert('Admin access required.');
+      window.location.href = 'index.html';
+      return;
+    }
+  } catch (e) {
+    localStorage.removeItem('anchorpoint_token');
+    localStorage.removeItem('anchorpoint_user');
+    window.location.href = 'login.html';
+  }
+})();
+
    document.addEventListener('DOMContentLoaded', () => {
      attachFilters();
      attachSearch();

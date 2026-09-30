@@ -201,7 +201,7 @@
    });
    
    // PATCH /api/shipments/:tracking — update status + add event
-   router.patch('/:tracking', async function (req, res) {
+   router.patch('/:tracking', authMiddleware.requireAdmin, async function (req, res) {
      try {
        const tracking = req.params.tracking.toUpperCase();
        const shipment = await Shipment.findOne({ trackingNumber: tracking });
@@ -284,7 +284,7 @@
    });
    
    // DELETE /api/shipments/:tracking
-   router.delete('/:tracking', async function (req, res) {
+   router.delete('/:tracking', authMiddleware.requireAdmin, async function (req, res) {
      try {
        const tracking = req.params.tracking.toUpperCase();
        const result = await Shipment.findOneAndDelete({ trackingNumber: tracking });
