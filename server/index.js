@@ -55,6 +55,10 @@
    });
    
    app.use('/api/shipments', shipmentsRouter);
+
+   // ═══ AUTH ROUTES ═══
+const authRouter = require('./routes/auth');
+app.use('/api/auth', authRouter);
    
    // Fallback for frontend
    app.get('*', (req, res, next) => {

@@ -2,15 +2,39 @@
    ANCHORPOINT — Shipment Form Logic
    ═══════════════════════════════════════════ */
 
-// ═══ COUNTRY LIST ═══
+// ═══ COUNTRIES (200+ — alphabetical) ═══
 const countries = [
-  "Nigeria", "United States", "United Kingdom", "Canada", "Germany",
-  "France", "Netherlands", "Italy", "Spain", "China", "Japan", "India",
-  "Brazil", "South Africa", "Kenya", "Ghana", "Egypt", "UAE",
-  "Australia", "New Zealand", "South Korea", "Singapore", "Malaysia",
-  "Mexico", "Argentina", "Ireland", "Sweden", "Norway", "Denmark",
-  "Poland", "Portugal", "Belgium", "Switzerland", "Austria", "Turkey",
-  "Saudi Arabia", "Israel", "Pakistan", "Bangladesh", "Indonesia"
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+  "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
+  "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+  "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
+  "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
+  "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
+  "Congo", "Congo (DRC)", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic",
+  "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
+  "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+  "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana",
+  "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
+  "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland",
+  "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan",
+  "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+  "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+  "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+  "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia",
+  "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal",
+  "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea",
+  "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama",
+  "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
+  "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
+  "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe",
+  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore",
+  "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea",
+  "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
+  "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo",
+  "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+  "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
+  "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+  "Yemen", "Zambia", "Zimbabwe"
 ];
 
 // ═══ DOM READY ═══
@@ -24,9 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // ═══ POPULATE COUNTRY DROPDOWNS ═══
 function populateCountries() {
   const selects = ['senderCountry', 'receiverCountry'];
-  selects.forEach(id => {
+  selects.forEach(function (id) {
     const sel = document.getElementById(id);
-    countries.forEach(c => {
+    if (!sel) return;
+    countries.forEach(function (c) {
       const opt = document.createElement('option');
       opt.value = c;
       opt.textContent = c;
@@ -42,7 +67,7 @@ function attachLiveListeners() {
     'receiverCity', 'receiverCountry',
     'packageWeight', 'serviceType'
   ];
-  fields.forEach(id => {
+  fields.forEach(function (id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', updateSummary);
@@ -65,21 +90,17 @@ function updateSummary() {
     rate = parseFloat(serviceOption.dataset.rate);
   }
 
-  // From / To
   setText('sum-from', senderCity && senderCountry ? senderCity + ', ' + senderCountry : '—');
   setText('sum-to', receiverCity && receiverCountry ? receiverCity + ', ' + receiverCountry : '—');
 
-  // Service
   if (serviceOption && serviceOption.value) {
     setText('sum-service', serviceOption.textContent);
   } else {
     setText('sum-service', '—');
   }
 
-  // Weight
   setText('sum-weight', weight > 0 ? weight + ' kg' : '—');
 
-  // Price calculation
   const baseFee = 15;
   const price = (weight > 0 && rate > 0) ? (baseFee + weight * 4 * rate) : 0;
   setText('sum-price', price > 0 ? '$' + price.toFixed(2) : '$0.00');
@@ -90,9 +111,9 @@ function attachValidation() {
   const form = document.getElementById('shipment-form');
   const inputs = form.querySelectorAll('input, select');
 
-  inputs.forEach(input => {
-    input.addEventListener('blur', () => validateField(input));
-    input.addEventListener('input', () => {
+  inputs.forEach(function (input) {
+    input.addEventListener('blur', function () { validateField(input); });
+    input.addEventListener('input', function () {
       if (input.classList.contains('invalid')) validateField(input);
     });
   });
@@ -133,13 +154,13 @@ function isEmail(value) {
 // ═══ SUBMIT ═══
 function attachSubmit() {
   const form = document.getElementById('shipment-form');
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const inputs = form.querySelectorAll('input, select');
     let allValid = true;
 
-    inputs.forEach(input => {
+    inputs.forEach(function (input) {
       if (!validateField(input)) allValid = false;
     });
 
@@ -160,7 +181,7 @@ function attachSubmit() {
 function collectFormData() {
   const form = document.getElementById('shipment-form');
   const data = {};
-  new FormData(form).forEach((value, key) => { data[key] = value; });
+  new FormData(form).forEach(function (value, key) { data[key] = value; });
   return data;
 }
 

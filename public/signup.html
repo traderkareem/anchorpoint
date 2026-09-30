@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — AnchorPoint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AnchorPoint</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="ship.html">Ship</a>
+        <a href="track.html">Track</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-ghost">Login</a>
+        <a href="signup.html" class="btn btn-accent">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-main">
+    <div class="auth-card">
+      <div class="auth-head">
+        <h1>Create your account</h1>
+        <p>Ship and track packages worldwide in minutes.</p>
+      </div>
+
+      <form id="signup-form" class="auth-form" novalidate>
+        <div class="field">
+          <label for="name">Full name *</label>
+          <input type="text" id="name" name="name" required placeholder="e.g. Nuhu Abdulkarim" />
+          <span class="error-msg"></span>
+        </div>
+
+        <div class="field">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com" />
+          <span class="error-msg"></span>
+        </div>
+
+        <div class="field">
+            <label for="password">Password *</label>
+            <div class="password-wrap">
+              <input type="password" id="password" name="password" required placeholder="At least 6 characters" />
+              <button type="button" class="toggle-password" data-target="password" aria-label="Show password">Show</button>
+            </div>
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="field">
+            <label for="confirm">Confirm password *</label>
+            <div class="password-wrap">
+              <input type="password" id="confirm" name="confirm" required placeholder="Type it again" />
+              <button type="button" class="toggle-password" data-target="confirm" aria-label="Show password">Show</button>
+            </div>
+            <span class="error-msg"></span>
+          </div>
+
+        <div class="field">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="+234 800 000 0000" />
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-lg auth-submit">Create account</button>
+
+        <p class="auth-msg" id="auth-msg"></p>
+      </form>
+
+      <p class="auth-foot">
+        Already have an account?
+        <a href="login.html">Log in</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 AnchorPoint. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/signup.js"></script>
+</body>
+</html>
