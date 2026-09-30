@@ -600,3 +600,15 @@
     .header-actions .btn-ghost { display: none; }
     .track-form { flex-direction: column; }
   }
+  /* ═══ AUTH HEADER ═══ */
+.header-user {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .header-user { display: none; }
+}
