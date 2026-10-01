@@ -268,13 +268,17 @@
        msg.className = 'drawer-msg';
    
        try {
-         const res = await fetch('/api/shipments/' + tracking, {
-           method: 'PATCH',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-             newEvent: { status: status, location: location || '—' }
-           })
-         });
+        const token = localStorage.getItem('anchorpoint_token');
+        const res = await fetch('/api/shipments/' + tracking, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            newEvent: { status: status, location: location || '—' }
+          })
+        });
    
          const result = await res.json();
          if (!res.ok) throw new Error(result.error || 'Update failed');
@@ -308,15 +312,22 @@
    }
    
    async function deleteShipment(tracking) {
-     try {
-       const res = await fetch('/api/shipments/' + tracking, { method: 'DELETE' });
-       if (!res.ok) throw new Error('Delete failed');
-       closeDrawer();
-       loadShipments();
-     } catch (err) {
-       alert('Delete failed: ' + err.message);
-     }
-   }
+    try {
+      const token = localStorage.getItem('anchorpoint_token');
+      const res = await fetch('/api/shipments/' + tracking, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(function () { return {}; });
+        throw new Error(err.error || 'Delete failed');
+      }
+      closeDrawer();
+      loadShipments();
+    } catch (err) {
+      alert('Delete failed: ' + err.message);
+    }
+  }
    
    // ═══ HELPERS ═══
    function titleCase(str) {
