@@ -47,11 +47,16 @@
    }
    
    function calculatePrice(weight, serviceType) {
-     const rates = { 'same-day': 1.0, 'standard': 1.5, 'express': 2.5 };
-     const rate = rates[serviceType] || 1.0;
-     const baseFee = 15;
-     return +(baseFee + weight * 4 * rate).toFixed(2);
-   }
+    const rates = { 
+      'same-day': 5.0,      // Base $5 for local
+      'standard': 10.0,     // Base $10 for national
+      'express': 25.0       // Base $25 for international
+    };
+    const baseFee = rates[serviceType] || 10.0;
+    
+    // Add $2 per kg
+    return +(baseFee + (weight * 2)).toFixed(2);
+  }
    
    function buildTrackingEvents() {
      const now = new Date().toISOString();
